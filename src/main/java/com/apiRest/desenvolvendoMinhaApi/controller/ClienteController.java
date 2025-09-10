@@ -1,7 +1,9 @@
 package com.apiRest.desenvolvendoMinhaApi.controller;
 
+import com.apiRest.desenvolvendoMinhaApi.dto.ClienteDto;
 import com.apiRest.desenvolvendoMinhaApi.model.Cliente;
-import com.apiRest.desenvolvendoMinhaApi.repository.ClienteRepository;
+
+import com.apiRest.desenvolvendoMinhaApi.service.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -12,17 +14,25 @@ import java.util.List;
 @RequestMapping("/clientes")
 public class ClienteController {
 
-    @Autowired
-    private ClienteRepository clienteRepository;
+
+    private final ClienteService clienteService;
+
+    public ClienteController(ClienteService clienteService) {
+        this.clienteService = clienteService;
+    }
+
 
     @GetMapping
-    public List <Cliente> listar (){
-    return clienteRepository.findAll();
+    public List <ClienteDto> listar (){
+    return clienteService.listarClientes();
    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-   public Cliente adicionar(@RequestBody Cliente cliente) {
-   return clienteRepository.save(cliente);
+    public void adicionar(@RequestBody ClienteDto clienteDto) {
+        clienteService.adicionarCliente(clienteDto);
     }
+
+
+
 }
